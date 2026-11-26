@@ -78,10 +78,7 @@ define las etiquetas textuales. Puede modificarse en `CLASES` dentro de
 | `metadatos_knn.json` | Orden de columnas, versiones y resultados de validación. |
 | `requirements.txt` | Dependencias de los modelos. |
 | `requirements-flask.txt` | Dependencias de la aplicación, incluyendo las anteriores. |
-| `exportar_knn.py` | Reproducción del entrenamiento y exportación. |
-| `test_app.py` | Pruebas de la aplicación. |
-| `PROCESO_KNN.md` | Documentación de la exportación con joblib. |
-| `APLICACION_FLASK.md` | Detalles de la aplicación local. |
+
 
 Mantener los modelos, los metadatos y los módulos Python junto a `app.py` y
 conservar la carpeta `templates` con su estructura original.
