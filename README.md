@@ -15,7 +15,7 @@ scikit-learn y una implementación propia, ambos exportados con joblib.
 Abrir una terminal en la carpeta del proyecto. En Windows PowerShell:
 
 ```powershell
-cd "C:\Users\irinc\OneDrive\Documentos\ChatGPT\Study Bot"
+cd "C:\Users\irinc\OneDrive\Escritorio\Study Bot"
 ```
 
 Opcionalmente, crear un entorno virtual. Se puede usar su Python directamente
