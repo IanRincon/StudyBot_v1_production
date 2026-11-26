@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evaluar un lugar | Study Bot</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 32px 16px; background: #f2f5f8; color: #182d3c; font-family: system-ui, sans-serif; }
+    main { max-width: 780px; margin: auto; background: white; padding: 32px; border-radius: 16px; }
+    h1 { margin-top: 0; } p { line-height: 1.6; }
+    .campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; margin: 24px 0; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    input, select, button { font: inherit; padding: 10px; border: 1px solid #8b9daa; border-radius: 6px; }
+    input, select { width: 100%; } input:focus, select:focus { outline: 3px solid #b6dbff; }
+    button { background: #155b86; color: white; cursor: pointer; border: 0; padding: 12px 24px; }
+    .error { color: #a32121; display: block; margin-top: 5px; }
+    .resultado { padding: 18px; margin: 24px 0; border-radius: 8px; border: 2px solid; }
+    .apto { background: #eaf7ef; color: #185a32; }
+    .no-apto { background: #fff1eb; color: #833817; }
+    .resultado h2 { margin: 0; } small { line-height: 1.5; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>¿Es apto este lugar?</h1>
+  <p>Captura las características del lugar para obtener una predicción del modelo KNN.</p>
+  <p>Usa los códigos numéricos del dataset: <strong>0 o 1</strong> en cada campo.
+     Para flujo de personas, conserva la codificación utilizada al entrenar el modelo.</p>
+
+  {% if resultado is not none %}
+  <section class="resultado {{ 'apto' if resultado.clase == 1 else 'no-apto' }}" role="status">
+    <h2>{{ resultado.texto }}</h2>
+    <p>Según las características capturadas, el modelo clasifica el lugar como <strong>{{ resultado.texto | lower }}</strong>.</p>
+  </section>
+  {% endif %}
+  {% if errores %}<p class="error" role="alert">Revisa los campos indicados para obtener la predicción.</p>{% endif %}
+
+  <form method="post" action="{{ url_for('inicio') }}">
+    <label for="modelo">Modelo</label>
+    <select id="modelo" name="modelo">
+      <option value="sklearn" {% if modelo == 'sklearn' %}selected{% endif %}>KNN de scikit-learn</option>
+      <option value="personalizado" {% if modelo == 'personalizado' %}selected{% endif %}>KNN propio</option>
+    </select>
+    {% if errores.get('modelo') %}<small class="error">{{ errores.modelo }}</small>{% endif %}
+    <div class="campos">
+      {% for columna in columnas %}
+      <div>
+        <label for="{{ columna }}">{{ etiquetas[columna] }}</label>
+        <input id="{{ columna }}" name="{{ columna }}" type="number" min="0" max="1" step="1"
+               required value="{{ valores[columna] }}"
+               {% if errores.get(columna) %}aria-invalid="true" aria-describedby="error-{{ columna }}"{% endif %}>
+        {% if errores.get(columna) %}<small id="error-{{ columna }}" class="error">{{ errores[columna] }}</small>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <button type="submit">Evaluar lugar</button>
+  </form>
+  <p><small>El resultado es una predicción. Interpretación de clases utilizada: 1 = apto; 0 = no apto.</small></p>
+</main>
+</body>
+</html>
